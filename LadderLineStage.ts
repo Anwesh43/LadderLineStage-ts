@@ -33,6 +33,12 @@ class LadderLineStage {
             })
         }
     }
+
+    static init() {
+        const stage : LadderLineStage = new LadderLineStage()
+        stage.render()
+        stage.handleTap()
+    }
 }
 
 class State {
