@@ -3,6 +3,8 @@ const nodes : number = 5
 class LadderLineStage {
     canvas : HTMLCanvasElement = document.createElement('canvas')
     context : CanvasRenderingContext2D
+    ladderLine : LadderLine = new LadderLine()
+    animator : Animator = new Animator()
 
     constructor() {
         this.initCanvas()
@@ -16,11 +18,19 @@ class LadderLineStage {
     render() {
         this.context.fillStyle = '#212121'
         this.context.fillRect(0, 0, w, h)
+        this.ladderLine.draw(this.context)
     }
 
     handleTap() {
         this.canvas.onmousedown = () => {
-
+            this.ladderLine.startUpdating(() => {
+                this.animator.start(() => {
+                    this.render()
+                    this.ladderLine.update(() => {
+                        this.animator.stop()
+                    })
+                })
+            })
         }
     }
 }
@@ -48,7 +58,7 @@ class State {
     }
 }
 
-class Aninator {
+class Animator {
     animated : boolean = false
     interval : number
 
