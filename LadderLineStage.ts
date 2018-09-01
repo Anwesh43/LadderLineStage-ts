@@ -71,7 +71,7 @@ class Animator {
     start(cb : Function) {
         if (!this.animated) {
             this.animated = true
-            setInterval(cb, 50)
+            this.interval = setInterval(cb, 50)
         }
     }
 
@@ -102,6 +102,9 @@ class LLNode {
         if (this.prev) {
             this.prev.draw(context)
         }
+        if (this.state.scale == 0) {
+            return
+        }
         context.lineWidth = Math.min(w, h) / 60
         context.lineCap = 'round'
         context.strokeStyle = '#1976D2'
@@ -112,21 +115,23 @@ class LLNode {
         context.translate(w/2, this.i * gap)
         for (var i = 0; i < 2; i++) {
             context.save()
-            context.translate(-gap/2 * (1 - 2 * index), 0)
+            context.translate(-gap/2 * (1 - 2 * i), 0)
             context.beginPath()
             context.moveTo(0, 0)
             context.lineTo(0, gap * this.state.scale)
             context.stroke()
             context.restore()
         }
-        context.save()
-        context.translate(0, gap / 2)
-        context.scale(1 - 2 * index, 1)
-        context.beginPath()
-        context.moveTo(-gap/2, 0)
-        context.lineTo(-gap/2 + gap * sc, 0)
-        context.stroke()
-        context.restore()
+        if (sc != 0) {
+            context.save()
+            context.translate(0, gap / 2)
+            context.scale(1 - 2 * index, 1)
+            context.beginPath()
+            context.moveTo(-gap/2, 0)
+            context.lineTo(-gap/2 + gap * sc, 0)
+            context.stroke()
+            context.restore()
+        }
         context.restore()
     }
 
